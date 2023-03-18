@@ -1,5 +1,6 @@
 const RouthCase = {
   NORMAL_CASE: "Normal case",
+  NEGATIVE_COEFFICIENT: "easy case",
   SPECIAL_CASE_1: "Special case 1",
   SPECIAL_CASE_2: "Special case 2",
 };
@@ -136,7 +137,7 @@ export class RouthArray {
     // Special case 2
     // Find auxiliary equation and derivative
     let auxiliaryEquation = "";
-    console.log(this.table);
+    // console.log(this.table);
     let power = this.numRows - zeroElementRow;
     for (let i = 0; i < this.numColumns; i++) {
       const coefficient = this.table[zeroElementRow - 1][i];
@@ -145,7 +146,7 @@ export class RouthArray {
       auxiliaryEquation += `${coefficient} s<sup>${power}</sup> + `;
     }
     auxiliaryEquation = auxiliaryEquation.slice(0, -3);
-    console.log(`Auxiliary polynomial: ${auxiliaryEquation}`);
+    // console.log(`Auxiliary polynomial: ${auxiliaryEquation}`);
 
     // Take derivative
     const auxiliaryDerivative = auxiliaryEquation
@@ -175,14 +176,32 @@ export class RouthArray {
     };
   };
 
+  countNegativeCoefficients = () => {
+    let count = 0;
+    for (let i = 0; i < this.coefficients.length; i++) {
+      if (this.coefficients[i] < 0) count++;
+    }
+    return count;
+  };
+
   calculateRouth = () => {
+    const negativeCoefficientCount = this.countNegativeCoefficients();
+    if (negativeCoefficientCount === this.coefficients.length) {
+      this.coefficients = this.coefficients.map((coefficient) =>
+        coefficient < 0 ? -coefficient : coefficient
+      );
+    } else if (negativeCoefficientCount > 0) {
+      this.routhCase = RouthCase.NEGATIVE_COEFFICIENT;
+      this.stability = "unstable";
+      return;
+    }
+
     this.fillInitRows();
     if (this.initRows === 2) {
       this.fillAllRows(this.initRows);
     }
 
     this.checkStability();
-    // console.log(this.table);
   };
 
   getTable = () => {
@@ -209,7 +228,10 @@ export class RouthArray {
 
       message += `<br> Auxiliary Equation: ${equation} <br>`;
       message += `Auxiliary Derivative: ${derivative} <br>`;
-      message += `Solve the Auxiliary Equation (roots) to determine stablity.`;
+      message += `Solve the Auxiliary Equation (roots) to determine if system is <b>unstable</b> or <b>marginally stable.</b>`;
+    } else if (this.routhCase === RouthCase.NEGATIVE_COEFFICIENT) {
+      message += `The Characteristic Equation contains a negative coefficients. <br>`;
+      message += `<b>The system is ${this.stability}</b>`;
     }
 
     if (

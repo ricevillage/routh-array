@@ -56,13 +56,17 @@ function createTableFromArray(routhArray) {
   const table = document.createElement("table");
 
   // iterate through routhArray and create table rows and data elements
-  routhArray.forEach((row) => {
+  routhArray.forEach((row, rowIndex) => {
     const tr = document.createElement("tr");
 
+    const routhPower = document.createElement("td");
+    routhPower.innerHTML = `s<sup>${routhArray.length - 1 - rowIndex}</sup>`;
+    tr.appendChild(routhPower);
+
     row.forEach((value) => {
-      const td = document.createElement("td");
-      td.innerText = value;
-      tr.appendChild(td);
+      const routhValue = document.createElement("td");
+      routhValue.innerText = value;
+      tr.appendChild(routhValue);
     });
 
     table.appendChild(tr);
