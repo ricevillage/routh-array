@@ -113,6 +113,7 @@ export class RouthArray {
     this.routhCase = RouthCase.SPECIAL_CASE_1;
     const epsilon = Number.EPSILON;
     this.table[zeroElementRow][0] = epsilon;
+    this.signChanges = 0;
     this.fillAllRows(zeroElementRow + 1);
     this.checkStability();
   };
@@ -165,6 +166,7 @@ export class RouthArray {
       this.table[zeroElementRow][i] = newCoefficients[i];
     }
     this.fillAllRows(zeroElementRow + 1);
+    this.signChanges = 0;
     this.checkStability();
 
     this.auxiliaryPackage = {
