@@ -65,6 +65,7 @@ export class RouthArray {
   checkStability = () => {
     let zeroElementRow = -1;
     let previousNumber = this.table[0][0];
+    let allRowsNegative = true;
 
     for (let i = 1; i < this.numRows; i++) {
       const currentNumber = this.table[i][0];
@@ -77,6 +78,8 @@ export class RouthArray {
       }
 
       previousNumber = currentNumber;
+
+      if (currentNumber > 0) allRowsNegative = false;
 
       if (this.table[i - 1][0] === 0) {
         zeroElementRow = i - 1;
@@ -98,7 +101,9 @@ export class RouthArray {
     } else if (!allRowsZero && zeroElementRow !== -1) {
       this.handleSpecialCase1(zeroElementRow);
     }
-    this.stability = this.signChanges > 0 ? "unstable" : "stable";
+
+    this.stability =
+      this.signChanges > 0 || allRowsNegative ? "unstable" : "stable";
   };
 
   handleSpecialCase1 = (zeroElementRow) => {
