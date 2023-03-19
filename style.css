@@ -23,6 +23,7 @@ input[type="number"]:focus {
 }
 
 button:hover {
+  color: white;
   background-color: #327ecf;
 }
 
@@ -47,4 +48,33 @@ table td {
 
 #result-container {
   padding: 20px;
+}
+
+/* Dropdown Instructions */
+
+.dropdown-header {
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  opacity: 95%;
+  min-width: 200px;
+  padding: 10px;
+  z-index: 1;
+}
+
+.dropdown-content p {
+  margin: 0;
+}
+
+.dropdown-content ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
 }
