@@ -1,4 +1,5 @@
 # Routh-Hurwitz Stability Criterion Calculator
+https://ricevillage.github.io/routh-array/
 
 This is a web application that calculates the stability of a given polynomial using the Routh-Hurwitz Stability Criterion. The application is written in JavaScript and can be run directly in a web browser.
 
