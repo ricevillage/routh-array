@@ -54,7 +54,9 @@ export class RouthArray {
           continue;
         }
 
-        this.table[i][j] = numerator / denominator;
+        const routhCoefficient = numerator / denominator;
+        const routhCoefficientPrecision = Number(routhCoefficient.toFixed(4));
+        this.table[i][j] = routhCoefficientPrecision;
       }
     }
   };
