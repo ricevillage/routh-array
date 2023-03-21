@@ -21,6 +21,7 @@ export class RouthArray {
     this.stability = undefined;
     this.signChanges = 0;
     this.auxiliaryPackage = [];
+    this.resultMessage = "";
   }
 
   fillInitRows = () => {
@@ -195,7 +196,8 @@ export class RouthArray {
     } else if (negativeCoefficientCount > 0) {
       this.routhCase = RouthCase.NEGATIVE_COEFFICIENT;
       this.stability = "unstable";
-      return;
+      this.writeResultMessage();
+      this.routhCase = RouthCase.NORMAL_CASE;
     }
 
     this.fillInitRows();
@@ -204,6 +206,7 @@ export class RouthArray {
     }
 
     this.checkStability();
+    this.writeResultMessage();
   };
 
   getTable = () => {
@@ -214,36 +217,38 @@ export class RouthArray {
     return this.stability;
   };
 
-  getResultMessage = () => {
-    let message = "";
-
+  writeResultMessage = () => {
     if (this.routhCase === RouthCase.SPECIAL_CASE_1) {
-      message += "<b>Special Case: Zero First-Column Element</b><br>";
-      message +=
+      this.resultMessage +=
+        "<b>Special Case: Zero First-Column Element</b><br>";
+      this.resultMessage +=
         "Replaced the zero in the first row with a small positive number (epsilon).<br>";
-      message += "Then, the calculations continue as normal.<br><br>";
+      this.resultMessage +=
+        "Then, the calculations continue as normal.<br><br>";
     } else if (this.routhCase === RouthCase.SPECIAL_CASE_2) {
-      message += "<b>Special Case: Zero Row</b><br>";
-      message += `Number of sign changes: <b>${this.signChanges}</b>. Therefore, the polynomial has ${this.signChanges} roots with positive real parts.<br>`;
+      this.resultMessage += "<b>Special Case: Zero Row</b><br>";
+      this.resultMessage += `Number of sign changes: <b>${this.signChanges}</b>. Therefore, the polynomial has ${this.signChanges} roots with positive real parts.<br>`;
 
       const { equation, derivative } = this.auxiliaryPackage;
 
-      message += `<br> Auxiliary Equation: ${equation} <br>`;
-      message += `Auxiliary Derivative: ${derivative} <br>`;
-      message += `Solve the Auxiliary Equation (roots) to determine if system is <b>unstable</b> or <b>marginally stable.</b>`;
+      this.resultMessage += `<br> Auxiliary Equation: ${equation} <br>`;
+      this.resultMessage += `Auxiliary Derivative: ${derivative} <br>`;
+      this.resultMessage += `Solve the Auxiliary Equation (roots) to determine if system is <b>unstable</b> or <b>marginally stable.</b>`;
     } else if (this.routhCase === RouthCase.NEGATIVE_COEFFICIENT) {
-      message += `The Characteristic Equation contains a negative coefficients. <br>`;
-      message += `<b>The system is ${this.stability}</b>`;
+      this.resultMessage += `<b>The system is ${this.stability}</b><br>`;
+      this.resultMessage += `The Characteristic Equation contains a negative coefficients. Solving the Routh Array anyways, we get the following: <br><br>`;
     }
 
     if (
       this.routhCase === RouthCase.NORMAL_CASE ||
       this.routhCase === RouthCase.SPECIAL_CASE_1
     ) {
-      message += `<b>The system is ${this.stability}</b>`;
-      message += `<br>Number of sign changes: <b>${this.signChanges}</b>. Therefore, the polynomial has ${this.signChanges} roots with positive real parts.`;
+      this.resultMessage += `<b>The system is ${this.stability}</b>`;
+      this.resultMessage += `<br>Number of sign changes: <b>${this.signChanges}</b>. Therefore, the polynomial has ${this.signChanges} roots with positive real parts.`;
     }
+  };
 
-    return message;
+  getResultMessage = () => {
+    return this.resultMessage;
   };
 }
